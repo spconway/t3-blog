@@ -1,4 +1,6 @@
 import Link from "next/link"
+import Header from "../../components/Head"
+import Main from "../../components/Main"
 import { trpc } from "../../utils/trpc"
 
 function PostListingPage(){
@@ -8,7 +10,8 @@ function PostListingPage(){
         return <p>Loading posts...</p>
     }
 
-    return (
+    return (<>
+        <Header title="Posts" />
         <div>{data?.map(post => {
             return (
                 <article key={post.id}>
@@ -17,6 +20,7 @@ function PostListingPage(){
                 </article>
             )
         })}</div>
+        </>
     )
 }
 

@@ -39,4 +39,14 @@ export const postRouter = createRouter()
             }
         })
     }
+}).query('recent-posts', {
+    resolve: ({ctx}) => {
+        return ctx.prisma.post.findMany({
+            where: {
+                createdAt: {
+                    gte: new Date("2022-01-01")
+                }
+            }
+        })
+    }
 })

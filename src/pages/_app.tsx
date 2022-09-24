@@ -5,6 +5,7 @@ import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
+import Layout from "../components/Layout";
 import { getBaseUrl } from "../constants";
 import { UserContextProvider } from "../context/user.context";
 import type { AppRouter } from "../server/router";
@@ -25,7 +26,9 @@ const MyApp: AppType = ({
   return (
     <UserContextProvider value={data}>
     {/* <SessionProvider session={session}> */}
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     {/* </SessionProvider> */}
     </UserContextProvider>
   );

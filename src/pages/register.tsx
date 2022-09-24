@@ -10,7 +10,7 @@ function RegisterPage() {
 
     const {handleSubmit, register} = useForm<CreateUserInput>()
 
-    const {mutate, error} = trpc.useMutation(['user.register-user'], {
+    const {mutate, error} = trpc.useMutation(['users.register-user'], {
         onSuccess: () => {
             router.push('/login')
         }
