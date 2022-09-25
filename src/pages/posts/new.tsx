@@ -3,12 +3,13 @@ import { useRouter } from "next/router"
 import { useForm, FormProvider } from "react-hook-form"
 import Header from "../../components/Head"
 import Main from "../../components/Main"
+import TinyMCEEditor from "../../components/TinyMCEEditor"
 import { CreatePostInput } from "../../schema/post.schema"
 import { trpc } from "../../utils/trpc"
 
-const TinyMCEEditor = dynamic(() => import("../../components/TinyMCEEditor"), {
-    ssr: false
-})
+// const TinyMCEEditor = dynamic(() => import("../../components/TinyMCEEditor"), {
+//     ssr: false
+// })
 
 function CreatePostPage() {
 
