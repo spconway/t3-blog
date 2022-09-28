@@ -1,55 +1,44 @@
-import dynamic from "next/dynamic"
-import { useRouter } from "next/router"
-import { useForm, FormProvider } from "react-hook-form"
-import Header from "../../components/Head"
-import Main from "../../components/Main"
-import TinyMCEEditor from "../../components/TinyMCEEditor"
-import { CreatePostInput } from "../../schema/post.schema"
-import { trpc } from "../../utils/trpc"
-
-// const TinyMCEEditor = dynamic(() => import("../../components/TinyMCEEditor"), {
-//     ssr: false
-// })
+import { useRouter } from 'next/router';
+import Header from '../../components/Head';
+import { CreatePostInput, createPostSchema } from '../../schema/post.schema';
+import { trpc } from '../../utils/trpc';
+import { InputField } from '../../components/Form/InputField';
+import { Form } from '../../components/Form/Form';
 
 function CreatePostPage() {
+  const router = useRouter();
 
-    const router = useRouter()
+  const { mutate, error } = trpc.useMutation(['posts.create-post'], {
+    onSuccess({ id }) {
+      router.push(`/posts/${id}`);
+    },
+  });
 
-    const methods = useForm<CreatePostInput>({
-        defaultValues: {},
-        mode: "onChange"
-    })
+  function onSubmit(values: CreatePostInput) {
+    mutate(values);
+  }
 
-    const {mutate, error} = trpc.useMutation(['posts.create-post'], {
-        onSuccess({id}) {
-            router.push(`/posts/${id}`)
-        }
-    })
+  return (
+    <>
+      <Header title="New Post" />
+      <Form<CreatePostInput, typeof createPostSchema> onSubmit={onSubmit}>
+        {({ register }) => (
+          <>
+            {error && error.message}
 
-    function onSubmit(values: CreatePostInput) {
-        mutate(values)
-    }
-
-    return <>
-        <Header title="New Post" />
-        <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
-                {error && error.message}
-
-                <h1>Create posts</h1>
-                <br />
-                <br />
-                <input type='text' placeholder="Your post title" {...methods.register('title')} />
-                <br />
-                <TinyMCEEditor
-                    control={methods.control}
-                    name="body"
-                />
-                <br />
-                <button>Create post</button>
-            </form>
-        </FormProvider>
+            <h1>Create posts</h1>
+            <br />
+            <br />
+            <InputField type="text" label="Title" registration={register('title')} name="title" />
+            <br />
+            <InputField type="richTextEditor" label="Body" registration={register('body')} name="body" />
+            <br />
+            <button>Create post</button>
+          </>
+        )}
+      </Form>
     </>
+  );
 }
 
-export default CreatePostPage
+export default CreatePostPage;
